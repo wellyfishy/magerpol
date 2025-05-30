@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+}
+
+nav .profile {
+    color: white;
+}
+
+.profile-image .profile-edit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    background: white;
+}
+
+/* Halaman Mahasiswa */
+.content {
+    display: flex;
+}
+
+.content .side-profile p {
+    font-size: 12px;
+}
+
+.side-profile .card {
+    width: 300px;
+    margin-top: 12px;
+}
+
+.content .warning {
+    margin-top: 12px;
+    width: 100%;
+}
+
+.searchbar input {
+    width: 40%;
+}
+
+.searchbar select {
+    width: 14%;
+}
+
+select {
+    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik02LjU0MiA1aDYuOTE2Yy40NjYgMCAuODUyIDAgMS4xNTEuMDI4Yy4yOTcuMDI4LjYxMS4wOS44NTguMjk0Yy4zMzguMjc3LjUzLjY5My41MzMgMS4xMjljLjAwMi4zMTYtLjE0LjYtLjMwMS44NThjLS4xNjMuMjYtLjQuNTczLS42OS45NTRsLTIuNTkgMy40MTRjLS4yNDYuMzI0LS4zMjcuNDM0LS4zODMuNTUxYTEuNSAxLjUgMCAwIDAtLjEyLjM1OWMtLjAyNi4xMy0uMDI4LjI3LS4wMjguNjgydjQuMjM2YzAgLjIxNSAwIC40MDgtLjAxMy41NjNjLS4wMTQuMTUzLS4wNDYuMzU5LS4xNzcuNTM3YS45Ni45NiAwIDAgMS0uNzE0LjM5NGMtLjIyNy4wMTQtLjQxOS0uMDc3LS41NTItLjE1MnMtLjI5LS4xODMtLjQ2MS0uMzAxbC0uOTg0LS42OGwtLjA0Mi0uMDI5Yy0uMi0uMTM3LS4zOC0uMjYtLjUxNC0uNDNhMS41IDEuNSAwIDAgMS0uMjYtLjVjLS4wNi0uMjA4LS4wNi0uNDI3LS4wNi0uNjc2VjEzLjI3YzAtLjQxMi0uMDAxLS41NTMtLjAyNy0uNjgyYTEuNSAxLjUgMCAwIDAtLjEyLS4zNTljLS4wNTYtLjExNy0uMTM3LS4yMjctLjM4My0uNTUxbC0yLjU1OC0zLjM3bC0uMDA2LS4wMWwtLjAyNy0uMDM0YTE0IDE0IDAgMCAxLS42ODktLjk1NGMtLjE2MS0uMjU3LS4zMDMtLjU0Mi0uMzAxLS44NThjLjAwMi0uNDM2LjE5NS0uODUyLjUzMy0xLjEzYy4yNDctLjIwMy41Ni0uMjY1Ljg1OC0uMjkzQzUuNjkgNSA2LjA3NiA1IDYuNTQyIDVtLS4xMTcgMy41bDEuOTUyIDIuNTcybC4wMjguMDM3Yy4yMDguMjc0LjM1NC40NjUuNDU5LjY4MnEuMTQuMjg4LjIwMi42MDRjLjA0Ni4yMzYuMDQ2LjQ3OS4wNDYuODI4djIuOTU2YzAgLjMzLjAwNC4zOTUuMDIuNDQ2cS4wMjYuMDkuMDgyLjE2Yy4wMy4wMzguMDc1LjA3NS4zNDEuMjU5bC45NjYuNjY2Yy4xNjcuMTE1LjI3Ny4xOS4zNi4yNDFjLjAwNy0uMTAzLjAwNy0uMjQ2LjAwNy0uNDY3di00LjI2MWMwLS4zNSAwLS41OTIuMDQ2LS44MjhxLjA2My0uMzE2LjIwMi0uNjA0Yy4xMDUtLjIxNy4yNTEtLjQwOC40Ni0uNjgzbC4wMjctLjAzNkwxMy41NzUgOC41em03LjkwOC0xYy4yMzYtLjMxMS40MDMtLjUzOC41MTgtLjcyMWMuMTQtLjIyNC4xNS0uMzA1LjE0OS0uMzIzYS40Ny40NyAwIDAgMC0uMTY4LS4zNjJjLS4wMDUtLjAwNC0uMDYyLS4wNDYtLjMxNi0uMDdDMTQuMjY5IDYgMTMuOTMgNiAxMy40MzIgNkg2LjU2OGMtLjQ5OSAwLS44MzcgMC0xLjA4NC4wMjRjLS4yNTQuMDI0LS4zMTEuMDY2LS4zMTYuMDdBLjQ3LjQ3IDAgMCAwIDUgNi40NTZjMCAuMDE4LjAwOS4xLjE0OS4zMjNjLjExNS4xODMuMjgyLjQxLjUxOC43MjF6bTEuNjY3IDNhLjUuNSAwIDAgMSAuNS0uNWgzYS41LjUgMCAwIDEgMCAxaC0zYS41LjUgMCAwIDEtLjUtLjVNMTQuNSAxM2EuNS41IDAgMCAxIC41LS41aDQuNWEuNS41IDAgMCAxIDAgMUgxNWEuNS41IDAgMCAxLS41LS41bS0uNSAyLjVhLjUuNSAwIDAgMSAuNS0uNWg1YS41LjUgMCAwIDEgMCAxaC01YS41LjUgMCAwIDEtLjUtLjVtMCAyLjVhLjUuNSAwIDAgMSAuNS0uNUgxN2EuNS41IDAgMCAxIDAgMWgtMi41YS41LjUgMCAwIDEtLjUtLjUiLz48L3N2Zz4=);
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.status-magang h5 {
+    background: #648DB3;
+    color: white;
+}
+
+.job .card-body {
+    background: #648DB3;
+    color: white;
+}
+
+/* Layar IPAD */
+@media (max-width: 768px) {
+    .warning h6 {
+        display: none;
+    }
+
+    .content {
+        display: contents;
+        text-align: -webkit-center;
+    }
+
+    .searchbar input {
+    width: 30%;
+    }
+
+    .searchbar select {
+        width: 24%;
+    }
+
+    .status-magang .card {
+        width:50%
+    }
+
+    .status-magang h5 {
+        font-size: 12px;
+    }
+
+}
+
+/* Halaman Update Mahasiswa */
+.image-container {
+    position: relative;
+    width: fit-content;
+    display: inline-block;
+  }
+
+  .profile-image-hover {
+    transition: opacity 0.3s ease;
+  }
+
+  .image-container:hover .profile-image-hover {
+    opacity: 0.5;
+  }
+
+  .change-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    display: none;
+    pointer-events: none;
+  }
+
+  .image-container:hover .change-text {
+    display: block;
+  }
+
+  .profile-update {
+    display: none;
+  }
+
+  .prieview-profil {
+    background: #648DB3;
+    color: white;
+  }
