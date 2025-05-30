@@ -1,0 +1,20 @@
+{% extends "umkm/auth/base.html" %} {% load static %} 
+
+{% block content %}
+<h3 class="mx-auto d-block mb-4" style="margin-top: -50px;"><b>Halaman log in UMKM</b></h3>
+<form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username..." required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password..." required>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+        Tidak punya akun?<a href="{% url 'register-umkm' %}" class="text-muted" style="margin-left: -100px;">Register</a>
+        <button type="submit" class="btn btn-success">Login</button>
+    </div>
+</form>
+{% endblock content %}

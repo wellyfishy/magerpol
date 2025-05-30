@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Auth - MagerPOL</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+    <link rel="icon" href="{% static 'img/piggypoggo/jinhsi-icon.ico' %}" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/magerpol.min.css' %}" />
+    
+    <style>
+      .login-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      @media (min-width: 768px) {
+        .login-card {
+          flex-direction: row;
+          height: 500px;
+        }
+
+        .login-img-wrapper {
+          width: 50%;
+        }
+
+        .login-form-wrapper {
+          width: 50%;
+        }
+      }
+
+      @media (max-width: 767.98px) {
+        .login-card {
+          flex-direction: column;
+        }
+
+        .login-img-wrapper {
+          height: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card login-card shadow w-100 mx-2" style="max-width: 800px; display: flex;">
+      <div class="login-img-wrapper">
+        <img src="{% static 'img/magerpol/rektorat.jpg' %}" class="login-img" alt="Image">
+      </div>
+      <div class="card-body login-form-wrapper d-flex flex-column justify-content-center p-4">
+        <img src="{% static 'img/magerpol/magerPOL.png' %}" class="mx-auto d-block mb-4" width="300" height="150" style="border-radius: 5px; margin-top: -50px;">
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li style="color: red;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Username/NIM</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username/nim..." required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password..." required>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="#" class="text-muted"></a>
+                <button type="submit" class="btn btn-success">Login</button>
+            </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="{% static 'js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/core/popper.min.js' %}"></script>
+    <script src="{% static 'js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/magerpol.min.js' %}"></script>
+  </body>
+</html>
