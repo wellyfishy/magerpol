@@ -2,15 +2,32 @@
 
 {% block content %}
 <h3 class="mx-auto d-block mb-4" style="margin-top: -50px;"><b>Halaman register UMKM</b></h3>
+{% if messages %}
+  <ul class="list-unstyled">
+      {% for message in messages %}
+          <li class="alert {% if 'success' in message.tags %}alert-success
+                      {% elif 'error' in message.tags or 'danger' in message.tags %}alert-danger
+                      {% elif 'warning' in message.tags %}alert-warning
+                      {% elif 'info' in message.tags %}alert-info
+                      {% else %}alert-secondary{% endif %}">
+              {{ message }}
+          </li>
+      {% endfor %}
+  </ul>
+{% endif %}
 <form method="POST">
     {% csrf_token %}
     <div class="mb-3">
         <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username..." required>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Masukan username..." required>
     </div>
     <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password..." required>
+        <label for="password1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password1" name="password1" placeholder="Masukan password..." required>
+    </div>
+    <div class="mb-3">
+        <label for="password2" class="form-label">Password Konfirmasi</label>
+        <input type="password" class="form-control" id="password2" name="password2" placeholder="Masukan password yang sama..." required>
     </div>
     <div class="d-flex justify-content-between align-items-center">
         Sudah punya akun?<a href="{% url 'login-umkm' %}" class="text-muted" style="margin-left: -100px;">Log In</a>

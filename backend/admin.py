@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(UMKM)
 admin.site.register(Lowongan)
+admin.site.register(Kampus)

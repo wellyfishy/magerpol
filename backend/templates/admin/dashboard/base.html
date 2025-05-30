@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Dashboard - UMKM</title>
+    <title>Dashboard - Kampus</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
     <link rel="icon" href="{% static 'img/piggypoggo/jinhsi-icon.ico' %}" type="image/x-icon"/>
 
@@ -23,7 +23,7 @@
       <div class="sidebar sidebar-style-2" data-background-color="dark">
         <div class="sidebar-logo">
           <div class="logo-header" data-background-color="dark">
-            <a href="{% url 'dashboard-umkm' %}" class="logo">
+            <a href="{% url 'dashboard-kampus' %}" class="logo">
               <img src="{% static 'img/magerpol/magerPOL_outline.png' %}" alt="navbar brand" class="navbar-brand" height="100" style=""/>
             </a>
             <div class="nav-toggle">
@@ -51,8 +51,13 @@
                 <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
                     <li class="{% if on == 'utama' %}active{% endif %}">
-                      <a href="{% url 'dashboard-umkm' %}">
+                      <a href="{% url 'dashboard-kampus' %}">
                         <span class="sub-item">Utama</span>
+                      </a>
+                    </li>
+                    <li class="{% if on == 'kandang' %}active{% endif %}">
+                      <a href="">
+                        <span class="sub-item">Kandang</span>
                       </a>
                     </li>
                   </ul>
@@ -104,7 +109,7 @@
                       <li>
                         <div class="user-box">
                           <div class="avatar-lg">
-                            <img src="{% if umkm.logo_umkm %}{{ umkm.logo_umkm.url }}{% else %}{% static 'img/magerpol/default-profile.jpg' %}{% endif %}" alt="image profile" class="avatar-img rounded"/>
+                            <img src="{% static 'img/magerpol/default-profile.jpg' %}" alt="image profile" class="avatar-img rounded"/>
                           </div>
                           <div class="u-text">
                             <h4>{{ request.user }}</h4>

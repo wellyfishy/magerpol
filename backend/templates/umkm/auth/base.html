@@ -7,9 +7,9 @@
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
     <link rel="icon" href="{% static 'img/piggypoggo/jinhsi-icon.ico' %}" type="image/x-icon"/>
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/plugins.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/magerpol.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'umkm/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'umkm/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'umkm/css/magerpol.min.css' %}" />
     
     <style>
       .login-img {
@@ -51,29 +51,15 @@
       </div>
       <div class="card-body login-form-wrapper d-flex flex-column justify-content-center p-4">
         <img src="{% static 'img/magerpol/magerPOL.png' %}" class="mx-auto d-block mb-4" width="300" height="150" style="border-radius: 5px; margin-top: -50px;">
-        {% if messages %}
-          <ul class="list-unstyled">
-              {% for message in messages %}
-                  <li class="alert {% if 'success' in message.tags %}alert-success
-                              {% elif 'error' in message.tags or 'danger' in message.tags %}alert-danger
-                              {% elif 'warning' in message.tags %}alert-warning
-                              {% elif 'info' in message.tags %}alert-info
-                              {% else %}alert-secondary{% endif %}">
-                      {{ message }}
-                  </li>
-              {% endfor %}
-          </ul>
-        {% endif %}
-
         {% block content %}
         {% endblock content %}
       </div>
     </div>
 
-    <script src="{% static 'js/core/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'js/core/popper.min.js' %}"></script>
-    <script src="{% static 'js/core/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
-    <script src="{% static 'js/magerpol.min.js' %}"></script>
+    <script src="{% static 'umkm/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'umkm/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'umkm/js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'umkm/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+    <script src="{% static 'umkm/js/magerpol.min.js' %}"></script>
   </body>
 </html>

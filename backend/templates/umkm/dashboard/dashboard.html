@@ -1,27 +1,101 @@
-{% extends "umkm/base.html" %} {% load static %}
+{% extends "umkm/dashboard/base.html" %} {% load static %}
 
 {% block content %}
 <div class="container">
   <div class="page-inner">
-    <div class="page-header">
-      <h3 class="fw-bold mb-3">Kandang</h3>
+    {% if not umkm.has_sent %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Validasi UMKM Anda</div>
+          </div>
+          <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="nama">Nama lengkap penanggung jawab.*</label>
+                  <input type="text" name="nama" class="form-control" id="nama" placeholder="Masukan nama lengkap..." required>
+                </div>
+                <div class="form-group">
+                  <label for="nohp">No HP (WA).*</label>
+                  <input type="text" name="nohp" class="form-control" id="nohp" placeholder="08XXX..." required>
+                  <small id="nohpHelp" class="form-text text-muted">Nomor HP anda aman pada kami.</small>
+                </div>
+                <div class="form-group">
+                  <label for="nama_umkm">Nama UMKM/Perusahaan yang di daftarkan.*</label>
+                  <input type="text" name="nama_umkm" class="form-control" placeholder="Masukan nama UMKM/Perusahaan..." aria-label="umkm" required>
+                </div>
+                <div class="form-group">
+                  <label for="deskripsi">Deskripsi UMKM/Perusahaan yang di daftarkan.*</label>
+                  <textarea name="deskripsi" class="form-control" placeholder="Masukan deskripsi UMKM/Perusahaan..." rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="file">File proposal.*</label>
+                  <input type="file" name="file" id="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="logo">Logo perusahaan (Opsional).</label>
+                  <input type="file" name="logo" id="logo" accept="image/*" class="form-control">
+                </div>
+              </div>
+              <div class="card-action">
+                <button type="submit" name="submit_type" value="validasi_umkm" class="btn btn-success">Submit</button>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <h6 class="op-7 mb-2" style="margin-top: -30px;">Halaman Utama MagerPOL</h6>
+    {% elif umkm.has_sent and not umkm.status %}
+    <div class="row">
+      <div class="col-md-12">
+        Terima kasih telah mengirim form registrasi UMKM/Perusahaan anda. Selanjutnya mohon menunggu 2x24 jam untuk hasil approval anda.
+      </div>
+    </div>
+    {% elif umkm.has_sent and umkm.status == '1' %}
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">Dashboard</h3>
+    </div>
+    <h6 class="op-7 mb-2" style="margin-top: -30px;">Halaman utama UMKM</h6>
+    
     <div class="row row-card-no-pd">
       <div class="col-12 col-sm-6 col-md-6 col-xl-3">
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <div>
-                <h6><b>Banyak Kandang</b></h6>
-                <p class="text-muted">Total banyaknya kandang</p>
+                <h6><b>Total Lowongan</b></h6>
+                <p class="text-muted">Total banyaknya lowongan anda</p>
               </div>
-              <h4 class="text-info fw-bold">{{ all_kandang_count }}</h4>
+              <h4 class="text-info fw-bold">0</h4>
             </div>
             <div class="d-flex justify-content-between mt-2">
-              <p class="text-muted mb-0"></p>
-              <p class="text-muted mb-0">
-                <b>{{ all_kandang_count }} Kandang</b>
+              <p class="text-info mb-0"></p>
+              <p class="text-info mb-0">
+                <b>0 Lowongan</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+            <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Pending</b></h6>
+                <p class="text-muted">Banyaknya mahasiswa yang lamar masih pending</p>
+              </div>
+              <h4 class="text-warning fw-bold">0</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-warning mb-0"></p>
+              <p class="text-warning mb-0">
+                <b>0 Mahasiswa</b>
               </p>
             </div>
           </div>
@@ -32,15 +106,15 @@
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <div>
-                <h6><b>Banyak Babi</b></h6>
-                <p class="text-muted">Total banyaknya babi</p>
+                <h6><b>Total Ditolak</b></h6>
+                <p class="text-muted">Banyaknya lamaran yang di tolak</p>
               </div>
-              <h4 class="text-danger fw-bold">{{ all_babi_count }}</h4>
+              <h4 class="text-danger fw-bold">0</h4>
             </div>
             <div class="d-flex justify-content-between mt-2">
-              <p class="text-muted mb-0"></p>
-              <p class="text-muted mb-0">
-                <b>{{ all_babi_count }} Babi</b>
+              <p class="text-danger mb-0"></p>
+              <p class="text-danger mb-0">
+                <b>0 Mahasiswa</b>
               </p>
             </div>
           </div>
@@ -51,128 +125,164 @@
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <div>
-                <h6><b>Babi/Kandang</b></h6>
-                <p class="text-muted">Rata-rata babi per kandang</p>
+                <h6><b>Total Diterima</b></h6>
+                <p class="text-muted">Banyaknya lamaran di approve</p>
               </div>
-              <h4 class="text-warning fw-bold">{{ average_babi_per_kandang }}</h4>
+              <h4 class="text-success fw-bold">0</h4>
             </div>
             <div class="d-flex justify-content-between mt-2">
-              <p class="text-muted mb-0"></p>
-              <p class="text-muted mb-0">
-                <b>{{ average_babi_per_kandang }} Babi/Kandang</b>
+              <p class="text-success mb-0"></p>
+              <p class="text-success mb-0">
+                <b>0 Mahasiswa</b>
               </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6><b>Semua Penjualan</b></h6>
-                <p class="text-muted">Total babi dijual</p>
-              </div>
-            </div>
-            <div class="progress progress-sm">
-            </div>
-            <div class="d-flex justify-content-between mt-2">
-              <p class="text-muted mb-0"></p>
-              <p class="text-muted mb-0">0</p>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="card">
-          <div class="card-header">
-            <div class="card-head-row card-tools-still-right">
-              <div class="card-title">Histori Aktivitas</div>
-              <div class="card-tools">
-                <a href="" class="btn btn-success">
-                  <i class="fa fa-eye"></i>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-title mb-0">Kumpulan Lowongan Anda</div>
+                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#lowonganTambah">
+                    Tambah Lowongan 
+                  <i class="fa fa-plus fs-5"></i>
                 </a>
-              </div>
+                <div class="modal fade" id="lowonganTambah" tabindex="-1" aria-labelledby="lowonganTambah" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="lowonganTambah"><b>Tambah Lowongan</b></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form method="POST">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label for="judul_lowongan">Judul Lowongan.*</label>
+                                <input type="text" name="judul_lowongan" class="form-control" id="judul_lowongan" placeholder="Masukan judul lowongan..." required>
+                              </div>
+                              <div class="form-group">
+                                <label for="deskripsi_lowongan">Deskripsi/Kriteria Lowongan.*</label>
+                                <textarea name="deskripsi_lowongan" class="form-control" placeholder="Masukan deskripsi lowongan..." rows="5" required></textarea>
+                              </div>
+                              <div class="form-group">
+                                <label for="alamat_lowongan">Alamat Lowongan.*</label>
+                                <input type="text" name="alamat_lowongan" class="form-control" placeholder="Masukan alamat lowongan magang..." required>
+                              </div>
+                            </div>
+                            <div class="card-action">
+                              <button type="submit" name="submit_type" value="validasi_umkm" class="btn btn-success">Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
-          </div>
-          <div class="card-body">
-            <ol class="activity-feed">
-              {% for riwayat in all_riwayats %}
-              <li class="feed-item feed-item-secondary">
-                <time class="date" datetime="">{{ riwayat.tanggal }}</time>
-                <span class="text">
-                  {{ riwayat }}
-                </span>
-              </li>
-              {% endfor %}
-              <li class="feed-item feed-item-secondary">
-                <span class="text">
-                  ...
-                </span>
-              </li>
-            </ol>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-head-row">
-              <div class="card-title">To-do list</div>
-              <div class="card-tools">
-                <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
-                  <li class="nav-item">
-                    <a class="nav-link active" id="pills-today" data-bs-toggle="pill" href="#pills-today" role="tab" aria-selected="true">
-                      Tiap Hari
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" id="pills-week" data-bs-toggle="pill" href="#pills-week" role="tab" aria-selected="false">
-                      Tiap Minggu
-                    </a>
-                  </li>
-                </ul>
+            
+            {% if messages %}
+              <ul class="list-unstyled">
+                {% for message in messages %}
+                <li class="alert {% if 'success' in message.tags %}alert-success
+                  {% elif 'error' in message.tags or 'danger' in message.tags %}alert-danger
+                  {% elif 'warning' in message.tags %}alert-warning
+                  {% elif 'info' in message.tags %}alert-info
+                  {% else %}alert-secondary{% endif %}">
+                  {{ message }}
+                </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            <div class="card-body">
+			        <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                  <div class="row" style="margin-top: -25px;">
+                    <div class="col-sm-12">
+                      <table id="basic-datatables" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                        <thead>
+                        <tr role="row">
+                          <th style="width: 10px; text-align: center;">No</th>
+                          <th style="width: 150px; text-align: center;">Judul</th>
+                          <th style="width: 70px; text-align: center;">Lamaran Menunggu</th>
+                          <th style="width: 70px; text-align: center;">Lamaran Diterima</th>
+                          <th style="width: 70px; text-align: center;">Lamaran Ditolak</th>
+                          <th style="width: 70px; text-align: center;">Status</th>
+                          <th style="width: 70px; text-align: center;">MISC</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for lamaran in all_lamarans %}
+                        <tr role="row">
+                          <td class="sorting_1" style="text-align: center;">{{ forloop.counter }}</td>
+                          <td style="text-align: center;">
+                            <a href="#">
+                              <b>-</b>
+                            </a>
+                          </td>
+                          <td style="text-align: center;"><b>-</b></td>
+                          <td style="text-align: center;"><b>-</b></td>
+                          <td style="text-align: center;"><b>-</b></td>
+                          <td style="text-align: center;">
+                          {% if umkm.status == '1' %}
+                            <span class="badge badge-warning">Mencari</span>
+                          {% elif umkm.status == '2' %}
+                            <span class="badge badge-success">Tutup</span>
+                          {% endif %}
+                          </td>
+                          <td style="text-align: center;">
+                            <button class="btn btn-dark" type="button">
+                              <i class="fa fa-pen"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="basic-datatables_info" role="status" aria-live="polite">
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="basic-datatables_paginate">
+                      <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled" id="basic-datatables_previous">
+                          <a href="#" class="page-link">
+                            Kembali
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                          <a href="#" class="page-link">
+                            1
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item next disabled">
+                          <a href="#" class="page-link">
+                            Selanjutnya
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="d-flex align-items-center ms-3">
-              <div class="selectgroup selectgroup-pills me-2">
-                <label class="selectgroup-item mb-0">
-                  <input type="checkbox" name="value" value="HTML" class="selectgroup-input">
-                  <span class="selectgroup-button">
-                    <i class="fas fa-check"></i>
-                  </span>
-                </label>
-              </div>
-              <h6 class="text-uppercase fw-bold mb-1 mb-0">
-                BERI SEMUA MAKAN BABI
-                <span class="text-warning ps-3">PENDING</span>
-              </h6>
-            </div>
-
-            <div class="separator-dashed"></div>
-
-            <div class="d-flex align-items-center ms-3">
-              <div class="selectgroup selectgroup-pills me-2">
-                <label class="selectgroup-item mb-0">
-                  <input type="checkbox" name="value" value="HTML" class="selectgroup-input">
-                  <span class="selectgroup-button">
-                    <i class="fas fa-check"></i>
-                  </span>
-                </label>
-              </div>
-              <h6 class="text-uppercase fw-bold mb-1 mb-0">
-                LAPORAN HARIAN BABI
-                <span class="text-warning ps-3">PENDING</span>
-              </h6>
-            </div>
           </div>
         </div>
       </div>
     </div>
+    {% elif umkm.has_sent and umkm.status == '2' %}
+    <div class="row">
+      <div class="col-md-12">
+        Salah satu UMKM yang telah mendaftar, yaitu {{ umkm.nama_umkm }}, terpaksa ditolak oleh admin setelah melalui proses verifikasi. Penolakan ini disebabkan karena data yang diunggah tidak lengkap dan deskripsi usaha tidak sesuai dengan ketentuan yang telah ditetapkan. Pihak UMKM akan diberi kesempatan untuk melakukan pendaftaran ulang dengan melengkapi dokumen yang dibutuhkan.
+      </div>
+    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock content %}

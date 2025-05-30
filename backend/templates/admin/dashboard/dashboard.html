@@ -1,0 +1,216 @@
+{% extends "admin/dashboard/base.html" %} {% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="page-inner">
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">Dashboard</h3>
+    </div>
+    <h6 class="op-7 mb-2" style="margin-top: -30px;">Halaman utama kampus</h6>
+    
+    <div class="row row-card-no-pd">
+      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total UMKM</b></h6>
+                <p class="text-muted">Total banyaknya UMKM terdaftar</p>
+              </div>
+              <h4 class="text-info fw-bold">{{ all_umkms.count }}</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-info mb-0"></p>
+              <p class="text-info mb-0">
+                <b>{{ all_umkms.count }} UMKM</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Pending</b></h6>
+                <p class="text-muted">Total UMKM yang masih pending</p>
+              </div>
+              <h4 class="text-warning fw-bold">{{ all_pending_umkms_count }}</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-warning mb-0"></p>
+              <p class="text-warning mb-0">
+                <b>{{ all_pending_umkms_count }} UMKM</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Ditolak</b></h6>
+                <p class="text-muted">Total banyaknya UMKM di decline</p>
+              </div>
+              <h4 class="text-danger fw-bold">{{ all_declined_umkms_count }}</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-danger mb-0"></p>
+              <p class="text-danger mb-0">
+                <b>{{ all_declined_umkms_count }} UMKM</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Diterima</b></h6>
+                <p class="text-muted">Total banyaknya UMKM di approve</p>
+              </div>
+              <h4 class="text-success fw-bold">{{ all_approved_umkms_count }}</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-success mb-0"></p>
+              <p class="text-success mb-0">
+                <b>{{ all_approved_umkms_count }} UMKM</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-title mb-0">Kumpulan UMKM/Perusahaan di Kampus Anda</div>
+            </div>
+            
+            {% if messages %}
+              <ul class="list-unstyled">
+                  {% for message in messages %}
+                      <li class="alert {% if 'success' in message.tags %}alert-success
+                      {% elif 'error' in message.tags or 'danger' in message.tags %}alert-danger
+                      {% elif 'warning' in message.tags %}alert-warning
+                      {% elif 'info' in message.tags %}alert-info
+                      {% else %}alert-secondary{% endif %}">
+                          {{ message }}
+                      </li>
+                  {% endfor %}
+              </ul>
+            {% endif %}
+            <div class="card-body">
+			        <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                  <div class="row" style="margin-top: -25px;">
+                    <div class="col-sm-12">
+                      <table id="basic-datatables" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                        <thead>
+                        <tr role="row">
+                          <th style="width: 10px; text-align: center;">No</th>
+                          <th style="width: 150px; text-align: center;">UMKM</th>
+                          <th style="width: 150px; text-align: center;">Penanggung Jawab</th>
+                          <th style="width: 70px; text-align: center;">Proposal</th>
+                          <th style="width: 70px; text-align: center;">Status</th>
+                          <th style="width: 70px; text-align: center;">MISC</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for umkm in all_umkms %}
+                        <tr role="row">
+                          <td class="sorting_1" style="text-align: center;">{{ forloop.counter }}</td>
+                          <td style="text-align: center;">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#umkmModal{{ umkm.pk }}">
+                              <b>{{ umkm.nama_umkm }}</b>
+                            </a>
+                          </td>
+                          <div class="modal fade" id="umkmModal{{ umkm.pk }}" tabindex="-1" aria-labelledby="umkmModalLabel{{ umkm.pk }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="umkmModalLabel{{ umkm.pk }}"><b>{{ umkm.nama_umkm }}</b></h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <p><strong>Penanggung Jawab:</strong> {{ umkm.nama_penanggung_jawab }}</p>
+                                  <p><strong>Deskripsi:</strong> {{ umkm.deskripsi_umkm|linebreaks }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <td style="text-align: center;"><b>{{ umkm.nama_penanggung_jawab }}</b></td>
+                          <td style="text-align: center;">
+                            <a href="{% url 'view-umkm-file' umkm_pk=umkm.pk %}" class="btn btn-success" target="_blank">
+                              <i class="fa fa-eye"></i>
+                            </a>
+                          </td>
+                          <td style="text-align: center;">
+                          {% if umkm.status == '1' %}
+                            <span class="badge badge-success">Diterima</span>
+                          {% elif umkm.status == '2' %}
+                            <span class="badge badge-danger">Ditolak</span>
+                          {% else %}
+                            <span class="badge badge-warning">Pending</span>
+                          {% endif %}
+                          </td>
+                          <td style="text-align: center;">
+                            <div class="dropdown">
+                              <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-pen"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-white">
+                                <li><a class="dropdown-item" href="{% url 'umkm-approve' umkm_pk=umkm.pk %}">Approve</a></li>
+                                <li><a class="dropdown-item" href="{% url 'umkm-decline' umkm_pk=umkm.pk %}">Decline</a></li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="basic-datatables_info" role="status" aria-live="polite">
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="basic-datatables_paginate">
+                      <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled" id="basic-datatables_previous">
+                          <a href="#" class="page-link">
+                            Kembali
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                          <a href="#" class="page-link">
+                            1
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item next disabled">
+                          <a href="#" class="page-link">
+                            Selanjutnya
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block script %}{% endblock script %}
+      
