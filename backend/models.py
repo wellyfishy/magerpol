@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 class UMKM(models.Model):
     STATUS = [
@@ -26,6 +27,24 @@ class Lowongan(models.Model):
     deskripsi_lowongan = models.TextField(null=True, blank=True)
     alamat_lowongan = models.CharField(max_length=200, null=True, blank=True)
     status_lowongan = models.CharField(choices=STATUS, null=True, blank=True, default='1')
+    lamaran_dibuka = models.DateField(null=True, blank=True)
+    lamaran_ditutup = models.DateField(null=True, blank=True)
+    is_publish = models.BooleanField(default=True)
+
+    def get_status(self):
+        today = date.today()
+
+        if (self.lamaran_dibuka and self.lamaran_ditutup and self.lamaran_dibuka <= today <= self.lamaran_ditutup):
+            return "Mencari"
+        else:
+            return "Tutup" 
+
+class Kategori(models.Model):
+    judul_kategori = models.CharField(max_length=50, null=True, blank=True)
+
+class DetailKategori(models.Model):
+    kategori = models.ForeignKey(Kategori, null=True, blank=True, on_delete=models.CASCADE)
+    lowongan = models.ForeignKey(Lowongan, null=True, blank=True, on_delete=models.CASCADE)
 
 class Kampus(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)

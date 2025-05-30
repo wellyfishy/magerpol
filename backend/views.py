@@ -56,7 +56,8 @@ def logoutfunc(request):
 
 def dashboardUMKM(request):
     umkm = UMKM.objects.get(user=request.user)
-
+    all_kategoris = Kategori.objects.all()
+    all_lowongans = Lowongan.objects.filter(umkm=umkm).order_by('-pk')
 
     if request.method == 'POST':
         if request.POST.get('submit_type') == 'validasi_umkm':
@@ -77,10 +78,29 @@ def dashboardUMKM(request):
             umkm.save()
 
             return redirect('dashboard-umkm')
+        
+        elif request.POST.get('submit_type') == 'tambah_lowongan':
+            judul_lowongan = request.POST.get('judul_lowongan').strip().upper()
+            deskripsi_lowongan = request.POST.get('deskripsi_lowongan')
+            alamat_lowongan = request.POST.get('alamat_lowongan').strip()
+            kategoris = request.POST.getlist('kategori')
+            lamaran_dibuka = request.POST.get('lamaran_dibuka')
+            lamaran_ditutup = request.POST.get('lamaran_ditutup')
+
+            new_lowongan = Lowongan.objects.create(umkm=umkm, judul_lowongan=judul_lowongan, deskripsi_lowongan=deskripsi_lowongan, alamat_lowongan=alamat_lowongan, lamaran_dibuka=lamaran_dibuka, lamaran_ditutup=lamaran_ditutup)
+
+            for kategori in kategoris:
+                kategori = Kategori.objects.filter(pk=kategori).first()
+                new_detail_kategori = DetailKategori.objects.create(kategori=kategori, lowongan=new_lowongan)
+
+            messages.success(request, 'Sukses membuat lowongan baru!')
+            return redirect('dashboard-umkm')
 
     context = {
         'on': 'utama',
         'umkm': umkm,
+        'all_kategoris': all_kategoris,
+        'all_lowongans': all_lowongans,
     }
     return render(request, 'umkm/dashboard/dashboard.html', context)
 
