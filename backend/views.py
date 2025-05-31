@@ -13,10 +13,13 @@ from django.conf import settings
 import requests
 from django.views.decorators.csrf import csrf_exempt
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 HF_API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
-HF_API_TOKEN = "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"
-HEADERS = {"Authorization": f"Bearer {HF_API_TOKEN}"}
+TOKEN = os.getenv("HF_API_TOKEN")
+HEADERS = {"Authorization": f"Bearer {TOKEN}"}
     
 def summarize_text(text):
     payload = {"inputs": text[:1000]}  # batasi 1000 karakter
