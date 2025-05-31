@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagerPOL | Mahasiswa</title>
+    <link rel="stylesheet" href="{% static 'mahasiswa/style.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+       <div class="navbar-left">
+        <a href="{% url 'dashboard-mahasiswa' %}" class="logo">
+            <img src="{% static 'img/magerpol/MagerPOL.png' %}" alt="logo" style="height: 75px; width: 125px;">
+        </a>
+       </div>
+       <div class="navbar-center">
+        <ul>
+            <li><a href="{% url 'dashboard-mahasiswa' %}" class="{% if on == 'home' %}active-link{% endif %}"><span>Home</span></a></li>
+            <li><a href="{% url 'edit-profile-mahasiswa' %}" class="{% if on == 'edit-profil' %}active-link{% endif %}"><span>Profil</span></a></li>
+        </ul>
+       </div>
+       <div class="navbar-right">
+        <div class="online">
+            <img src="{% static 'img/magerpol/default-profile.jpg' %}" class="nav-profile-img" onclick="toggleMenu()">
+        </div> 
+       </div>
+       <div class="profile-menu-wrap" id="profileMenu">
+        <div class="profile-menu">
+            <div class="user-info">
+                <img src="{% if mahasiswa.profile %}{{ mahasiswa.profile.url }}{% else %}{% static 'img/magerpol/default-profile.jpg' %}{% endif %}">
+                <div>
+                    <h3>{{ mahasiswa.nama_mahasiswa }}</h3>
+                    <a href="{% url 'edit-profile-mahasiswa' %}">Lihat profil</a>
+                </div>
+            </div>
+            <hr>
+            <a href="{% url 'logout' %}" class="profile-menu-link">
+                <p>Logout</p>
+                <span>></span>
+            </a> 
+        </div>
+       </div>
+    </nav>
+
+    {% block content %}{% endblock content %}
+
+<script src="https://cdn.jsdelivr.net/npm/iconify-icon@3.0.0/dist/iconify-icon.min.js"></script>
+<script>
+    function toggleMenu(){
+        profileMenu.classList.toggle("open-menu");
+    }
+</script>
+
+{% block script %}{% endblock script %}

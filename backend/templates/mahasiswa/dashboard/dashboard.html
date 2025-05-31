@@ -1,0 +1,148 @@
+{% extends "mahasiswa/dashboard/base.html" %} {% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="left-sidebar"> 
+            <div class="sidebar-profile-box">
+                <img src="{% static 'img/magerpol/rektorat.jpg' %}" width="100%" height="150px">
+                <div class="sidebar-profile-info">
+                    <img src="{% if mahasiswa.profile %}{{ mahasiswa.profile.url }}{% else %}{% static 'img/magerpol/default-profile.jpg' %}{% endif %}">
+                    <h1>{{ mahasiswa.nama_mahasiswa }}</h1>
+                    <h3></h3>
+                    <span class="liked-users"></span>
+                    <ul>
+                        <li>NIM: <span style="color: black"><b>{{ mahasiswa.nim }}</b></span></li>
+                        <li>Jurusan: <span style="color: black"><b>{% if mahasiswa.jurusan %}{{ mahasiswa.jurusan.judul_kategori }}{% else %}Tidak ada{% endif %}</b></span></li>
+                        <li>No HP:<span style="color: black">{% if mahasiswa.nohp_mahasiswa %}{{ mahasiswa.nohp_mahasiswa }}{% else %}Tidak ada{% endif %}</span></li>
+                    </ul>
+                </div>
+                <div class="sidebar-profile-link">
+                    <iconify-icon icon="mi:document" width="24" height="24"></iconify-icon>
+                    <p>
+                        <span style="margin-left: 5px;">
+                            CV:
+                        </span>
+                        {% if not mahasiswa.cv %}
+                        <span style="background-color: red; color: white; border-radius: 5px; margin-left: 5px; padding-left: 5px; padding-right: 5px;">
+                            Belum
+                        </span>
+                        {% else %}
+                        <span style="background-color: green; color: white; border-radius: 5px; margin-left: 5px; padding-left: 5px; padding-right: 5px;">
+                            Sudah
+                        </span>
+                        {% endif %}
+                    </p>
+                    <p>
+                        <iconify-icon icon="uil:bag" width="24" height="24"></iconify-icon>
+                        <span style="margin-left: 5px;">
+                            Status Magang:
+                        </span>
+                        {% if mahasiswa.status == '1' %}
+                        <span style="background-color: red; color: white; border-radius: 5px; margin-left: 5px; padding-left: 5px; padding-right: 5px;">
+                            Nganggur
+                        </span>
+                        {% elif mahasiswa.status == '2' %}
+                        <span style="background-color: orange; color: white; border-radius: 5px; margin-left: 5px; padding-left: 5px; padding-right: 5px;">
+                            Mengajukan
+                        </span>
+                        {% elif mahasiswa.status == '3' %}
+                        <span style="background-color: green; color: white; border-radius: 5px; margin-left: 5px; padding-left: 5px; padding-right: 5px;">
+                            Sedang Magang
+                        </span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+            </div>
+        <div class="main-content"> 
+            {% if not mahasiswa.cv %}
+            <div class="create-post">
+                <div class="create-post-input">
+                    <iconify-icon icon="zondicons:exclamation-solid" style="color: #222; margin:auto" width="50"></iconify-icon>
+                    <div>
+                        <h2>Lengkapi Profilmu</h2>
+                        <h5>Masa depan dimulai dari langkah kecil. Isi CV kamu hari ini, karena peluang besar bisa datang kapan saja! <a href="{% url 'edit-profile-mahasiswa' %}" style="color: #222"><u>Klik link disini!</u></a></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="sort-by">
+                <hr>
+                <p></p>
+            </div>
+            {% endif %}
+
+            {% for lowongan in all_lowongans %}
+            <div class="post">
+                <div class="post-author">
+                    <img src="{{ lowongan.umkm.logo_umkm.url }}">
+                    <div style="margin-left: 10px;">
+                        <h1>{{ lowongan.judul_lowongan }}</h1>
+                        <small>{{ lowongan.umkm.nama_umkm }} | {{ lowongan.umkm.nama_penanggung_jawab }}</small>
+                        <small style="font-size: 10px; margin-top: 2px;">{{ lowongan.lamaran_dibuka }} - {{ lowongan.lamaran_ditutup }} | {{ lowongan.mulai_magang }} - {{ lowongan.selesai_magang }}</small>
+                    </div>
+                </div>
+                <p>
+                    {{ lowongan.deskripsi_lowongan|linebreaks }}
+                </p>
+                <img src=""width="100%">
+                <div class="post-stats">
+                    <div>
+                        <img src="" >
+                        <img src="">
+                        <img src="">
+                        <span>
+                            Tags:
+                            {% for kategori in lowongan.kategori %}
+                            <b>{{ kategori.kategori.judul_kategori }}</b>
+                            {% endfor %}
+                        </span>
+                    </div>
+                </div>
+                <div class="post-activity">
+                    <div class="post-activity-link">
+                        {% if mahasiswa.lowongan == lowongan and mahasiswa.status == '2' %}
+                        <p style="background-color: orange; color: white; border-radius: 5px; padding-left: 5px; padding-right: 5px;">Sedang Diajukan</p>
+                        {% elif mahasiswa.lowongan == lowongan and mahasiswa.status == '3' %}
+                        <p style="background-color: green; color: white; border-radius: 5px; padding-left: 5px; padding-right: 5px;">Sedang Bermagang Disini</p>
+                        {% elif mahasiswa.status == '1' %}
+                            <button style="background:#222; padding:6px; border-radius:4px"><a onclick="return confirm('Apakah anda yakin ingin mengajukan magang di sini?')" href="{% url 'mahasiswa-ajukan' lowongan_pk=lowongan.pk %}" style="color:white;">Ajukan</a></button>
+                        {% else %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="right-sidebar">
+            <div class="sidebar-news">
+            <img src="" class="info-icon">
+            <h3>Rekomendasi</h3>
+
+            <a href="#">Butuh backend</a>
+            <span>1 hari yang lalu&middot; 6 Mengajukan</span>
+
+            <a href="#" class="read-more-link">Baca Selanjutnya</a>
+            </div>
+
+
+            <div class="sidebar-useful-links">
+                <a href="#">Tentang Kami</a>
+                <a href="#">MagerPOL</a>
+
+
+                <div class="copyright-msg">
+                    <img src="">
+                    <p>MagerPOL &#169; </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}
+
+{% block script %}{% endblock script %}
+</body>
+</html>

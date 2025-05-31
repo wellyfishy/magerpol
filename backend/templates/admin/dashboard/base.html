@@ -55,9 +55,9 @@
                         <span class="sub-item">Utama</span>
                       </a>
                     </li>
-                    <li class="{% if on == 'kandang' %}active{% endif %}">
-                      <a href="">
-                        <span class="sub-item">Kandang</span>
+                    <li class="{% if on == 'mahasiswa' %}active{% endif %}">
+                      <a href="{% url 'kampus-mahasiswa' %}">
+                        <span class="sub-item">Mahasiswa</span>
                       </a>
                     </li>
                   </ul>
@@ -153,15 +153,8 @@
     <script src="{% static 'umkm/js/core/popper.min.js' %}"></script>
     <script src="{% static 'umkm/js/core/bootstrap.min.js' %}"></script>
     <script src="{% static 'umkm/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
-    <script src="{% static 'umkm/js/plugin/chart.js/chart.min.js' %}"></script>
     <script src="{% static 'umkm/js/plugin/jquery.sparkline/jquery.sparkline.min.js' %}"></script>
-    <script src="{% static 'umkm/js/plugin/chart-circle/circles.min.js' %}"></script>
     <script src="{% static 'umkm/js/plugin/datatables/datatables.min.js' %}"></script>
-    <script src="{% static 'umkm/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
-    <script src="{% static 'umkm/js/plugin/jsvectormap/jsvectormap.min.js' %}"></script>
-    <script src="{% static 'umkm/js/plugin/jsvectormap/world.js' %}"></script>
-    <script src="{% static 'umkm/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
-    <script src="{% static 'umkm/js/magerpol.min.js' %}"></script>
     {% block script %}{% endblock script %}
   </body>
 </html>

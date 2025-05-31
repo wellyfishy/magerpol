@@ -175,7 +175,7 @@
                               </div>
                               <div class="form-group">
                                 <label class="form-label">Kategori (Pilih salah satu).*</label>
-                                <div id="nomorTandingContainer" class="selectgroup selectgroup-pills">
+                                <div id="kategoriContainer" class="selectgroup selectgroup-pills">
                                   {% for kategori in all_kategoris %}
                                   <label class="selectgroup-item">
                                     <input type="checkbox" name="kategori" value="{{ kategori.pk }}" class="selectgroup-input">
@@ -190,12 +190,21 @@
                                 <label for="lamaran_dibuka">Lamaran Dibuka.*</label>
                                 <input type="date" name="lamaran_dibuka" class="form-control" required>
                               </div>
+
+                              <div class="form-group">
+                                <label for="mulai_magang">Mulai Magang.*</label>
+                                <input type="date" name="mulai_magang" class="form-control" required>
+                              </div>
                             </div>
 
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="lamaran_ditutup">Lamaran Ditutup.*</label>
                                 <input type="date" name="lamaran_ditutup" class="form-control" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="selesai_magang">Selesai Magang.*</label>
+                                <input type="date" name="selesai_magang" class="form-control" required>
                               </div>
                             </div>
                             <div class="card-action">
@@ -258,24 +267,90 @@
                         <tr role="row">
                           <td class="sorting_1" style="text-align: center;">{{ forloop.counter }}</td>
                           <td style="text-align: center;">
-                            <a href="#">
-                              <b>{{ lowongan.judul_lowongan }}</b>
-                            </a>
+                              <a href="{% url 'lowongan-detail' lowongan_pk=lowongan.pk %}"><b>{{ lowongan.judul_lowongan }}</b></a>
                           </td>
                           <td style="text-align: center;"><b>-</b></td>
                           <td style="text-align: center;"><b>-</b></td>
                           <td style="text-align: center;"><b>-</b></td>
                           <td style="text-align: center;">
-                          {% if umkm.status == '1' %}
-                            <span class="badge badge-warning">Mencari</span>
-                          {% elif umkm.status == '2' %}
-                            <span class="badge badge-success">Tutup</span>
+                          {% if lowongan.get_status == 'Mendatang' %}
+                            <span class="badge badge-warning">{{ lowongan.get_status }}</span>
+                          {% elif lowongan.get_status == 'Mencari' %}
+                            <span class="badge badge-success">{{ lowongan.get_status }}</span>
+                          {% elif lowongan.get_status == 'Tutup' %}
+                            <span class="badge badge-danger">{{ lowongan.get_status }}</span>
                           {% endif %}
                           </td>
                           <td style="text-align: center;">
-                            <button class="btn btn-dark" type="button">
+                            <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#lowonganDetail{{ lowongan.pk }}">
                               <i class="fa fa-pen"></i>
                             </button>
+                            <div class="modal fade" id="lowonganDetail{{ lowongan.pk }}" tabindex="-1" aria-labelledby="lowonganDetail{{ lowongan.pk }}" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="lowonganDetail{{ lowongan.pk }}"><b>Tambah Lowongan</b></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                      <div class="row">
+                                        <div class="col-md-12">
+                                          <div class="form-group">
+                                            <label for="judul_lowongan">Judul Lowongan.*</label>
+                                            <input type="text" name="judul_lowongan" class="form-control" id="judul_lowongan" placeholder="Masukan judul lowongan..." value="{{ lowongan.judul_lowongan }}" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="deskripsi_lowongan">Deskripsi/Kriteria Lowongan.*</label>
+                                            <textarea name="deskripsi_lowongan" class="form-control" placeholder="Masukan deskripsi lowongan..." rows="5" required>{{ lowongan.deskripsi_lowongan }}</textarea>
+
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="alamat_lowongan">Alamat Lowongan.*</label>
+                                            <input type="text" name="alamat_lowongan" class="form-control" placeholder="Masukan alamat lowongan magang..." value="{{ lowongan.alamat_lowongan }}" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="form-label">Kategori (Pilih salah satu).*</label>
+                                            <div id="kategoriContainer" class="selectgroup selectgroup-pills">
+                                              {% for kategori in all_kategoris %}
+                                                {% if kategori in lowongan.kategoris %}
+                                                <label class="selectgroup-item">
+                                                  <input type="checkbox" name="kategori" value="{{ kategori.pk }}" class="selectgroup-input" checked>
+                                                  <span class="selectgroup-button">{{ kategori.judul_kategori }}</span>
+                                                </label>
+                                                {% else %}
+                                                <label class="selectgroup-item">
+                                                  <input type="checkbox" name="kategori" value="{{ kategori.pk }}" class="selectgroup-input" >
+                                                  <span class="selectgroup-button">{{ kategori.judul_kategori }}</span>
+                                                </label>
+                                                {% endif %}
+                                              {% endfor %}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="form-group">
+                                            <label for="lamaran_dibuka">Lamaran Dibuka.*</label>
+                                            <input type="date" name="lamaran_dibuka" class="form-control" value="{{ lowongan.lamaran_dibuka|date:'Y-m-d' }}" required>
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                          <div class="form-group">
+                                            <label for="lamaran_ditutup">Lamaran Ditutup.*</label>
+                                            <input type="date" name="lamaran_ditutup" class="form-control" value="{{ lowongan.lamaran_ditutup|date:'Y-m-d' }}" required>
+                                          </div>
+                                        </div>
+                                        <div class="card-action">
+                                          <button type="submit" name="submit_type" value="edit_lowongan" class="btn btn-success">Submit</button>
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                         {% endfor %}

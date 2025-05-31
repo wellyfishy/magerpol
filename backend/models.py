@@ -30,23 +30,51 @@ class Lowongan(models.Model):
     lamaran_dibuka = models.DateField(null=True, blank=True)
     lamaran_ditutup = models.DateField(null=True, blank=True)
     is_publish = models.BooleanField(default=True)
+    mulai_magang = models.DateField(null=True, blank=True)
+    selesai_magang = models.DateField(null=True, blank=True)
 
     def get_status(self):
         today = date.today()
 
-        if (self.lamaran_dibuka and self.lamaran_ditutup and self.lamaran_dibuka <= today <= self.lamaran_ditutup):
-            return "Mencari"
+        if self.status_lowongan == '1':
+            if self.lamaran_dibuka and today < self.lamaran_dibuka:
+                return "Mendatang"
+            elif self.lamaran_dibuka and self.lamaran_ditutup and self.lamaran_dibuka <= today <= self.lamaran_ditutup:
+                return "Mencari"
+            else:
+                return "Tutup"
         else:
-            return "Tutup" 
+            return "Tutup"
 
 class Kategori(models.Model):
     judul_kategori = models.CharField(max_length=50, null=True, blank=True)
 
 class DetailKategori(models.Model):
     kategori = models.ForeignKey(Kategori, null=True, blank=True, on_delete=models.CASCADE)
-    lowongan = models.ForeignKey(Lowongan, null=True, blank=True, on_delete=models.CASCADE)
+    lowongan = models.ForeignKey(Lowongan, null=True, blank=True, on_delete=models.CASCADE, related_name='details')
 
 class Kampus(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+
+class Mahasiswa(models.Model):
+    STATUS = [
+        ('1', 'Nganggur'),
+        ('2', 'Mengajukan'),
+        ('3', 'Sedang Magang')
+    ]
+    profile = models.FileField(upload_to='profile/', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    nim = models.CharField(unique=True, null=True, blank=True, max_length=50)
+    nama_mahasiswa = models.CharField(max_length=50, null=True, blank=True)
+    nohp_mahasiswa = models.CharField(null=True, blank=True, max_length=20)
+    lowongan = models.ForeignKey(Lowongan, null=True, blank=True, on_delete=models.SET_NULL)
+    status = models.CharField(max_length=20, null=True, blank=True, choices=STATUS, default='1')
+    jurusan = models.ForeignKey(Kategori, null=True, blank=True, on_delete=models.SET_NULL)
+    cv = models.FileField(upload_to='cv/', null=True, blank=True)
+    surat_pengajuan = models.FileField(upload_to='pengajuan/', null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.nim}'
+    
 
 

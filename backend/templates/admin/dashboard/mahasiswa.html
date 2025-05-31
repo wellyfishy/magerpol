@@ -1,0 +1,288 @@
+{% extends "admin/dashboard/base.html" %} {% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="page-inner">
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">Mahasiswa</h3>
+    </div>
+    <h6 class="op-7 mb-2" style="margin-top: -30px;">Halaman mahasiswa kampus</h6>
+    
+    <div class="row row-card-no-pd">
+      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Mahasiswa</b></h6>
+                <p class="text-muted">Total banyaknya mahasiswa POLNES</p>
+              </div>
+              <h4 class="text-info fw-bold">0</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-info mb-0"></p>
+              <p class="text-info mb-0">
+                <b>0 Mahasiswa</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Pending</b></h6>
+                <p class="text-muted">Banyaknya mahasiswa yang lamar masih pending</p>
+              </div>
+              <h4 class="text-warning fw-bold">0</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-warning mb-0"></p>
+              <p class="text-warning mb-0">
+                <b>0 Mahasiswa</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Ditolak</b></h6>
+                <p class="text-muted">Banyaknya lamaran yang di tolak</p>
+              </div>
+              <h4 class="text-danger fw-bold">0</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-danger mb-0"></p>
+              <p class="text-danger mb-0">
+                <b>0 Mahasiswa</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h6><b>Total Diterima</b></h6>
+                <p class="text-muted">Banyaknya lamaran di approve</p>
+              </div>
+              <h4 class="text-success fw-bold">0</h4>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <p class="text-success mb-0"></p>
+              <p class="text-success mb-0">
+                <b>0 Mahasiswa</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-title mb-0">Kumpulan Mahasiswa di Kampus Anda</div>
+                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#mahasiswaTambah">
+                    Tambah Mahasiswa 
+                  <i class="fa fa-plus fs-5"></i>
+                </a>
+                <div class="modal fade" id="mahasiswaTambah" tabindex="-1" aria-labelledby="mahasiswaTambah" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title"><b>Tambah Mahasiswa</b></h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="modal-body">
+
+                      <!-- Toggle Buttons -->
+                      <div class="d-flex justify-content-center mb-3">
+                        <button type="button" class="btn btn-outline-success me-2" id="btnManual">Manual Input</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnExcel">Excel Input</button>
+                      </div>
+
+                      <!-- Manual Form -->
+                      <div id="manualForm">
+                        <form method="POST">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <label for="nim_mahasiswa">NIM Mahasiswa.*</label>
+                            <input type="text" name="nim_mahasiswa" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="nama_mahasiswa">Nama Mahasiswa.*</label>
+                            <input type="text" name="nama_mahasiswa" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="nohp_mahasiswa">No HP Mahasiswa.*</label>
+                            <input type="text" name="nohp_mahasiswa" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="kategoriSelect">Jurusan.*</label>
+                            <select name="kategori" class="form-control" required>
+                              {% for kategori in all_kategoris %}
+                                <option value="{{ kategori.pk }}">{{ kategori.judul_kategori }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <button type="submit" name="submit_type" value="tambah_mahasiswa_manual" class="btn btn-success mt-3">Submit</button>
+                        </form>
+                      </div>
+
+                      <!-- Excel Upload Form (Initially Hidden) -->
+                      <div id="excelForm" style="display: none;">
+                        <form method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <label for="excel_file">Upload Excel File (.xlsx)</label>
+                            <input type="file" name="excel_file" class="form-control" accept=".xlsx" required>
+                          </div>
+                          <button type="submit" name="submit_type" value="tambah_mahasiswa_excel" class="btn btn-primary mt-3">Upload</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+            </div>
+            
+            {% if messages %}
+              <ul class="list-unstyled">
+                  {% for message in messages %}
+                      <li class="alert {% if 'success' in message.tags %}alert-success
+                      {% elif 'error' in message.tags or 'danger' in message.tags %}alert-danger
+                      {% elif 'warning' in message.tags %}alert-warning
+                      {% elif 'info' in message.tags %}alert-info
+                      {% else %}alert-secondary{% endif %}">
+                          {{ message }}
+                      </li>
+                  {% endfor %}
+              </ul>
+            {% endif %}
+            <div class="card-body">
+			        <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                  <div class="row" style="margin-top: -25px;">
+                    <div class="col-sm-12">
+                      <table id="basic-datatables" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                        <thead>
+                        <tr role="row">
+                          <th style="width: 10px; text-align: center;">NIM</th>
+                          <th style="width: 150px; text-align: center;">Nama</th>
+                          <th style="width: 150px; text-align: center;">No HP</th>
+                          <th style="width: 70px; text-align: center;">CV</th>
+                          <th style="width: 70px; text-align: center;">Status</th>
+                          <th style="width: 70px; text-align: center;">MISC</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for mahasiswa in all_mahasiswas %}
+                        <tr role="row">
+                          <td class="sorting_1" style="text-align: center;">{{ mahasiswa.nim }}</td>
+                          <td style="text-align: center;">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#mahasiswaModal{{ mahasiswa.pk }}">
+                              <b>{{ mahasiswa.nama_mahasiswa }}</b>
+                            </a>
+                          </td>
+                          <div class="modal fade" id="mahasiswaModal{{ mahasiswa.pk }}" tabindex="-1" aria-labelledby="mahasiswaModalLabel{{ mahasiswa.pk }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="mahasiswaModalLabel{{ mahasiswa.pk }}"><b>{{ mahasiswa.nohp_mahasiswa }}</b></h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <p><strong>Penanggung Jawab:</strong> {{ umkm.nama_penanggung_jawab }}</p>
+                                  <p><strong>Deskripsi:</strong> {{ umkm.deskripsi_umkm|linebreaks }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <td style="text-align: center;"><b>{% if mahasiswa.nohp_mahasiswa %}{{ mahasiswa.nohp_mahasiswa }}{% else %}Belum input no hp{% endif %}</b></td>
+                          <td style="text-align: center;">
+                            <a href="{% url 'view-mahasiswa-cv' mhs_pk=mahasiswa.pk %}" class="btn btn-success" target="_blank">
+                              <i class="fa fa-eye"></i>
+                            </a>
+                          </td>
+                          <td style="text-align: center;">
+                          {% if mahasiswa.status == '1' %}
+                            <span class="badge badge-danger">Nganggur</span>
+                          {% elif mahasiswa.status == '2' %}
+                            <span class="badge badge-warning">Mengajukan</span>
+                          {% elif mahasiswa.status == '3' %}
+                            <span class="badge badge-success">Sedang Magang</span>
+                          {% endif %}
+                          </td>
+                          <td style="text-align: center;">
+                            <div class="dropdown">
+                              <button class="btn btn-danger" type="button">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="basic-datatables_info" role="status" aria-live="polite">
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="basic-datatables_paginate">
+                      <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled" id="basic-datatables_previous">
+                          <a href="#" class="page-link">
+                            Kembali
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                          <a href="#" class="page-link">
+                            1
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item next disabled">
+                          <a href="#" class="page-link">
+                            Selanjutnya
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block script %}
+<script>
+  document.getElementById("btnManual").addEventListener("click", function () {
+    document.getElementById("manualForm").style.display = "block";
+    document.getElementById("excelForm").style.display = "none";
+  });
+
+  document.getElementById("btnExcel").addEventListener("click", function () {
+    document.getElementById("manualForm").style.display = "none";
+    document.getElementById("excelForm").style.display = "block";
+  });
+</script>
+
+{% endblock script %}
+      

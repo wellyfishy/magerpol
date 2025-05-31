@@ -1,0 +1,165 @@
+{% extends "admin/dashboard/base.html" %} {% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+          <a href="{% url 'dashboard-umkm' %}" class="btn btn-danger">Kembali</a>
+          <hr>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-title mb-0">Kumpulan Approval {{ lowongan.judul_lowongan }}</div>
+                <button onclick="prosesSemuaCV({{ lowongan.pk }})" class="btn btn-success">Proses Semua CV dengan AI</button>
+            </div>
+            
+            {% if messages %}
+              <ul class="list-unstyled">
+                  {% for message in messages %}
+                      <li class="alert {% if 'success' in message.tags %}alert-success
+                      {% elif 'error' in message.tags or 'danger' in message.tags %}alert-danger
+                      {% elif 'warning' in message.tags %}alert-warning
+                      {% elif 'info' in message.tags %}alert-info
+                      {% else %}alert-secondary{% endif %}">
+                          {{ message }}
+                      </li>
+                  {% endfor %}
+              </ul>
+            {% endif %}
+            <div class="card-body">
+                <div id="hasil-cv">
+
+                </div>
+                {% comment %} {% if hasil_ai %}
+                    {% for mahasiswa, ringkasan, skor in hasil_ai %}
+                    <div style="border:1px solid #ddd; padding:10px; margin-bottom:15px;">
+                        <strong>{{ mahasiswa.nama }} ({{ mahasiswa.nim }})</strong><br>
+                        <a href="{{ mahasiswa.cv.url }}" target="_blank">Download CV</a><br>
+                        <p><strong>Ringkasan:</strong> {{ ringkasan }}</p>
+                        <p><strong>Skor keseluruhan:</strong> {{ skor }} / 10</p>
+                    </div>
+                    {% endfor %}
+                {% endif %} {% endcomment %}
+            </div>
+            <div class="card-body">
+			    <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                  <div class="row" style="margin-top: -25px;">
+                    <div class="col-sm-12">
+                      <table id="basic-datatables" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                        <thead>
+                        <tr role="row">
+                          <th style="width: 10px; text-align: center;">NIM</th>
+                          <th style="width: 150px; text-align: center;">Mahasiswa</th>
+                          <th style="width: 150px; text-align: center;">No HP</th>
+                          <th style="width: 70px; text-align: center;">Jurusan</th>
+                          <th style="width: 70px; text-align: center;">CV</th>
+                          <th style="width: 70px; text-align: center;">Status</th>
+                          <th style="width: 70px; text-align: center;">MISC</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for mahasiswa in all_mahasiswas %}
+                        <tr role="row">
+                          <td class="sorting_1" style="text-align: center;"><b>{{ mahasiswa.nim }}</b></td>
+                          <td style="text-align: center;">  
+                            <b>{{ mahasiswa.nama_mahasiswa }}</b>
+                          </td>
+                          <td style="text-align: center;"><b>{{ mahasiswa.nohp_mahasiswa }}</b></td>
+                          <td style="text-align: center;"><b>{{ mahasiswa.jurusan.judul_kategori }}</b></td>
+                          <td style="text-align: center;">
+                            <a href="{% url 'view-umkm-file' umkm_pk=umkm.pk %}" class="btn btn-success" target="_blank">
+                              <i class="fa fa-eye"></i>
+                            </a>
+                          </td>
+                          <td style="text-align: center;">
+                          {% if mahasiswa.status == '2' %}
+                            <span class="badge badge-warning">Pending</span>
+                          {% elif mahasiswa.status == '3' %}
+                            <span class="badge badge-success">Diterima</span>
+                          {% endif %}
+                          </td>
+                          <td style="text-align: center;">
+                            <div class="dropdown">
+                              <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-pen"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-white">
+                                <li><a class="dropdown-item" href="{% url 'mahasiswa-approve' lowongan_pk=lowongan.pk mahasiswa_pk=mahasiswa.pk %}">Approve</a></li>
+                                <li><a class="dropdown-item" href="{% url 'mahasiswa-decline' lowongan_pk=lowongan.pk mahasiswa_pk=mahasiswa.pk %}">Decline</a></li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="basic-datatables_info" role="status" aria-live="polite">
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="basic-datatables_paginate">
+                      <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled" id="basic-datatables_previous">
+                          <a href="#" class="page-link">
+                            Kembali
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                          <a href="#" class="page-link">
+                            1
+                          </a>
+                        </li>
+                        <li class="paginate_button page-item next disabled">
+                          <a href="#" class="page-link">
+                            Selanjutnya
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block script %}
+
+<script>
+function prosesSemuaCV(lowonganId) {
+    const button = event.target;
+    button.disabled = true;
+    button.innerText = "Memproses...";
+
+    fetch(`/ajax/proses-semua-cv/?lowongan_id=${lowonganId}`)
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById("hasil-cv");
+        container.innerHTML = "";
+        data.data.forEach(m => {
+            container.innerHTML += `
+                <div style="margin-bottom: 1rem;">
+                    <strong>${m.nama} (${m.nim})</strong><br>
+                    <em>Ringkasan:</em> ${m.summary}<br>
+                    <em>Skor:</em> ${m.score} / 10
+                </div>
+            `;
+        });
+        button.innerText = "Selesai";
+    })
+    .catch(error => {
+        console.error("Gagal:", error);
+        button.innerText = "Gagal Memproses";
+    });
+}
+</script>
+{% endblock script %}
+      
